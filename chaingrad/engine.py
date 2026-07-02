@@ -44,7 +44,7 @@ class Value:
         return next
     
     def __pow__(self, other):
-        other = other if isinstance(other, Value) else Value(other)
+        assert isinstance(other, (int, float)), "only supporting int/float powers for now"
 
         next = self.data ** other.data
         next = Value(next)
