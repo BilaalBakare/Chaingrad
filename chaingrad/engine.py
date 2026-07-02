@@ -74,6 +74,15 @@ class Value:
     def __sub__(self, other):
         return self + -other
     
+    def __truediv__(self, other):
+        return self * (other ** -1)
+    
+    def __rtruediv__(self, other):
+        return other * (self ** -1)
+
+    def __rsub__(self, other):
+        return -self + other
+    
     def __radd__(self, other):
         return self + other
 
