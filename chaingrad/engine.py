@@ -74,4 +74,8 @@ class Value:
     def __sub__(self, other):
         return self + -other
     
-    
+    def __radd__(self, other):
+        return self + other
+
+    def __rmul__(self, other):
+        return self * other
