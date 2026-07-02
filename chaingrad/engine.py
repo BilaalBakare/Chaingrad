@@ -58,3 +58,32 @@ class Value:
         next._backward = _backward_closure
 
         return next
+    
+    def __mul__(self, other):
+        other = other if isinstance(other, Value) else Value(other)
+
+        next = self.data + other.data
+        next = Value(next)
+        next._op = '*'
+        next._prev = {self, other}
+        
+        def _backward_closure():
+            self.grad += other.data * next.grad
+            other.grad += self.data * next.grad
+        
+        next._backward = _backward_closure
+
+        return next
+    
+    def __neg__(self):
+        next = -self.data 
+        next = Value(next)
+        next._op = '-'
+        next._prev = {self}
+        
+        def _backward_closure():
+            self.grad += -1 * next.grad
+        
+        next._backward = _backward_closure
+
+        return next
