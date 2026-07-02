@@ -46,15 +46,14 @@ class Value:
     def __pow__(self, other):
         assert isinstance(other, (int, float)), "only supporting int/float powers for now"
 
-        next = self.data ** other.data
+        next = self.data ** other
         next = Value(next)
         next._op = '**'
-        next._prev = {self, other}
-        
+        next._prev = {self}
+
         def _backward_closure():
-            self.grad += other.data * (self.data ** (other.data - 1)) * next.grad
-            other.grad += next.data * math.log(self.data) * next.grad
-        
+            self.grad += other * (self.data ** (other - 1)) * next.grad
+
         next._backward = _backward_closure
 
         return next
@@ -74,3 +73,5 @@ class Value:
     
     def __sub__(self, other):
         return self + -other
+    
+    
