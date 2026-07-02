@@ -79,3 +79,22 @@ class Value:
 
     def __rmul__(self, other):
         return self * other
+
+    def backward(self):
+        sorted_list = []
+        visited = set()
+
+        def build_topo(node):
+            if node in visited:          
+                return                  
+            visited.add(node)            
+            for parent in node._prev:
+                build_topo(parent)     
+            sorted_list.append(node)    
+                 
+        build_topo(self)      
+                                   
+        self.grad = 1.0              
+
+        for node in reversed(sorted_list): 
+            node._backward()           
