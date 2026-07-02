@@ -1,0 +1,26 @@
+class Value:
+    def __init__(self, data):
+        self.data = data
+        self.grad = 0.0
+        self._op = ''
+        self._prev = set()
+        self._backward = lambda: None
+
+    def __repr__(self):
+        return f'Value(Data = {self.data}, grad = {self.grad})'
+    
+    def __add__(self, other):
+        other = other if isinstance(other, Value) else Value(other)
+
+        next = self.data + other.data
+        next = Value(next)
+        next._op = '+'
+        next._prev = {self, other}
+        
+        def _backward_closure():
+            self.grad += 1 * next.grad
+            other.grad += 1 * next.grad
+        
+        next._backward = _backward_closure
+
+        return next
